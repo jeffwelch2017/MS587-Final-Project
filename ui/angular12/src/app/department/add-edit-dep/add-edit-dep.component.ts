@@ -11,7 +11,6 @@ export class AddEditDepComponent implements OnInit {
   constructor(private service:SharedService) { }
 
   @Input() dep:any;
-  Dep: any
   DepartmentID:string;
   DepartmentName:string;
 
@@ -22,17 +21,17 @@ export class AddEditDepComponent implements OnInit {
 
   addDepartment(){
     var val = {DepartmentID:this.DepartmentID,
-                DepartmentName:this.DepartmentName}
+                DepartmentName:this.DepartmentName};
     this.service.addDepartment(val).subscribe(res=>{
       alert(res.toString());
    });
   }
   updateDepartment(){
     var val = {DepartmentID:this.DepartmentID,
-                 DepartmentName:this.DepartmentName}
+      DepartmentName:this.DepartmentName};
     this.service.updateDepartment(val).subscribe(res=>{
-      alert(res.toString());
-});
+    alert(res.toString());
+    });
   }
 
 }

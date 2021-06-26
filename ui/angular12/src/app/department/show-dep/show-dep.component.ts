@@ -14,9 +14,13 @@ export class ShowDepComponent implements OnInit {
 
   DepartmentList:any=[];
 
-  ModalTitle:string = "Add Departmentia";
+  ModalTitle:string;
   ActivateAddEditDepComp:boolean=false;
-  @Input() dep:any;
+  dep:any;
+
+  DepartmentIDFilter:string="";
+  DepartmentNameFilter:string="";
+  DepartmentListWithoutFilter:any[];
 
   ngOnInit(): void {
     this.refreshDepList();
@@ -37,6 +41,15 @@ export class ShowDepComponent implements OnInit {
     this.ActivateAddEditDepComp=true;
   }
 
+  deleteClick(item: { DepartmentID: any; }){
+    if(confirm('Are you sure?')){
+      this.service.deleteDepartment(item.DepartmentID).subscribe(data=>{
+      alert(data.toString());
+      this.refreshDepList();  
+      });
+    }
+  }
+
   closeClick(){
     this.ActivateAddEditDepComp=false;
     this.refreshDepList();
@@ -45,6 +58,31 @@ export class ShowDepComponent implements OnInit {
   refreshDepList(){
     this.service.getDepList().subscribe(data=>{
       this.DepartmentList=data;
+      this.DepartmentListWithoutFilter=data;
+    });
+  }
+
+  FilterFn(){
+    var DepartmentIDFilter = this.DepartmentIDFilter;
+    var DepartmentNameFilter = this.DepartmentNameFilter;
+
+    this.DepartmentList = this.DepartmentListWithoutFilter.filter(function (el){
+        return el.DepartmentID.toString().toLowerCase().includes(
+          DepartmentIDFilter.toString().trim().toLowerCase()
+        )&&
+        el.DepartmentName.toString().toLowerCase().includes(
+          DepartmentNameFilter.toString().trim().toLowerCase()
+        )
+    });
+  }
+
+  sortResult(prop: string | number,asc: any){
+    this.DepartmentList = this.DepartmentListWithoutFilter.sort(function(a,b){
+      if(asc){
+        return (a[prop]>b[prop])?1 : ((a[prop]<b[prop]) ?-1 :0);
+      }else{  
+        return (b[prop]>a[prop])?1 : ((b[prop]<a[prop]) ?-1 :0);
+      }
     });
   }
 
