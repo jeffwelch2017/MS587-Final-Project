@@ -14,6 +14,20 @@ import {SharedService} from './shared.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 
+import { SocialLoginModule, GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
+import { HomeComponent } from './home/home.component';
+
+const config = new SocialAuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('767941768689-cdjakbvn0r18kp0vg2dr86g2ancr89qh.apps.googleusercontent.com')
+  }
+]);
+
+export function provideConfig(){
+  return config;
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,16 +36,25 @@ import {FormsModule,ReactiveFormsModule} from '@angular/forms';
     AddEditDepComponent,
     EmployeeComponent,
     ShowEmpComponent,
-    AddEditEmpComponent
+    AddEditEmpComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SocialLoginModule,
+   
   ],
-  providers: [SharedService],
+  providers: [SharedService,
+    {
+      provide: SocialAuthServiceConfig,
+      useFactory: provideConfig
+    }
+        
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

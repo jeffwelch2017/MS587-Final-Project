@@ -1,0 +1,7 @@
+.photo{
+    object-fit: contain;
+}
+.card{
+    width: 20rem;
+    margin: 0 auto;
+}
